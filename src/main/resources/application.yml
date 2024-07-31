@@ -1,0 +1,38 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: spring.ai.anthropic.conversation
+  ai:
+    anthropic:
+      base-url: https://api.anthropic.com
+      api-key: ANTHROPIC_API_KEY
+      chat:
+        options:
+          temperature: 0.7
+          model: claude-3-5-sonnet-20240620
+          max-tokens: 450
+  cloud:
+    stream:
+      bindings:
+        input:
+          content-type: application/json
+          destination: ai_event
+          group: anthropic_event
+        output:
+          content-type: application/json
+          destination: ai_event
+          group: open_ai_event
+      function:
+        bindings:
+          messageConsumer-in-0: input
+          messageSupplier-out-0: output
+      rabbit:
+        bindings:
+          input.consumer:
+            binding-routing-key: "anthropic.ai.conversation.#"
+            binding-routing-key-delimiter: ","
+          output.producer:
+            routing-key-expression: headers.type
+    function:
+      definition: messageConsumer;messageSupplier
