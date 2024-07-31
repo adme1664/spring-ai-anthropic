@@ -1,2 +1,3 @@
 # A chat conversation with ChatGPT
-## This 
+#### Using the Spring AI project to initiate a chat conversation with ChatGPT. 
+####
